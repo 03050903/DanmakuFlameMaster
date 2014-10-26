@@ -23,47 +23,80 @@ import master.flame.danmaku.danmaku.util.DanmakuUtils;
 
 public class DanmakusRetainer {
 
-    private static IDanmakusRetainer rldrInstance = null;
-
-    private static IDanmakusRetainer lrdrInstance = null;
-
-    private static IDanmakusRetainer ftdrInstance = null;
-
-    private static IDanmakusRetainer fbdrInstance = null;
-
-    public static void fix(BaseDanmaku danmaku, IDisplayer disp) {
-
-        int type = danmaku.getType();
-        switch (type) {
-            case BaseDanmaku.TYPE_SCROLL_RL:
+    enum Retainer {
+        RL(BaseDanmaku.TYPE_SCROLL_RL) {
+            @Override
+            public void fix(BaseDanmaku danmaku, IDisplayer disp) {
                 if (rldrInstance == null) {
                     rldrInstance = new RLDanmakusRetainer();
                 }
                 rldrInstance.fix(danmaku, disp);
-                break;
-            case BaseDanmaku.TYPE_SCROLL_LR:
+            }
+        },
+        LR(BaseDanmaku.TYPE_SCROLL_LR) {
+            @Override
+            public void fix(BaseDanmaku danmaku, IDisplayer disp) {
                 if (lrdrInstance == null) {
                     lrdrInstance = new RLDanmakusRetainer();
                 }
                 lrdrInstance.fix(danmaku, disp);
-                break;
-            case BaseDanmaku.TYPE_FIX_TOP:
+            }
+        },
+        FT(BaseDanmaku.TYPE_FIX_TOP) {
+            @Override
+            public void fix(BaseDanmaku danmaku, IDisplayer disp) {
                 if (ftdrInstance == null) {
                     ftdrInstance = new FTDanmakusRetainer();
                 }
                 ftdrInstance.fix(danmaku, disp);
-                break;
-            case BaseDanmaku.TYPE_FIX_BOTTOM:
+            }
+        },
+        FB(BaseDanmaku.TYPE_FIX_BOTTOM) {
+            @Override
+            public void fix(BaseDanmaku danmaku, IDisplayer disp) {
                 if (fbdrInstance == null) {
                     fbdrInstance = new FBDanmakusRetainer();
                 }
                 fbdrInstance.fix(danmaku, disp);
-                break;
-            case BaseDanmaku.TYPE_SPECIAL:
+            }
+        },
+        S(BaseDanmaku.TYPE_SPECIAL) {
+            @Override
+            public void fix(BaseDanmaku danmaku, IDisplayer disp) {
                 danmaku.layout(disp, 0, 0);
-                break;
+            }
+        },
+        UNKNOWN(BaseDanmaku.TYPE_MOVEABLE_XXX) {
+            @Override
+            public void fix(BaseDanmaku danmaku, IDisplayer disp) {
+                // nothing
+            }
+        };
+        int mType;
+
+        Retainer(int type) {
+            mType = type;
         }
 
+        static Retainer get(int type) {
+            for (Retainer instance : values()) {
+                if (instance.mType == type)
+                    return instance;
+            }
+            return UNKNOWN;
+        }
+
+        public abstract void fix(BaseDanmaku danmaku, IDisplayer disp);
+    }
+    
+    private static IDanmakusRetainer rldrInstance;
+    private static IDanmakusRetainer lrdrInstance;
+    private static IDanmakusRetainer ftdrInstance;
+    private static IDanmakusRetainer fbdrInstance;
+
+    public static void fix(BaseDanmaku danmaku, IDisplayer disp) {
+        int type = danmaku.getType();
+        Retainer.get(type).fix(danmaku, disp);
     }
 
     public static void clear() {

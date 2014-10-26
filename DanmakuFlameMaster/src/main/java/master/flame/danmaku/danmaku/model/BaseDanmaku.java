@@ -20,20 +20,21 @@ public abstract class BaseDanmaku {
 
     public final static String DANMAKU_BR_CHAR = "/n";
 
+    /** {@value} */
     public final static int TYPE_SCROLL_RL = 1;
-
+    /** {@value} */
     public final static int TYPE_SCROLL_LR = 6;
-
+    /** {@value} */
     public final static int TYPE_FIX_TOP = 5;
-
+    /** {@value} */
     public final static int TYPE_FIX_BOTTOM = 4;
-
+    /** {@value} */
     public final static int TYPE_SPECIAL = 7;
-
+    /** {@value} */
     public final static int TYPE_MOVEABLE_XXX = 0; // TODO: add more type
-
+    /** {@value} */
     public final static int INVISIBLE = 0;
-
+    /** {@value} */
     public final static int VISIBLE = 1;
 
     /**
@@ -241,8 +242,8 @@ public abstract class BaseDanmaku {
     /**
      * return the type of Danmaku
      * 
-     * @return TYPE_SCROLL_RL = 0 TYPE_SCROLL_RL = 1 TYPE_SCROLL_LR = 2
-     *         TYPE_FIX_TOP = 3; TYPE_FIX_BOTTOM = 4;
+     * @return {@link #TYPE_SCROLL_RL} {@link #TYPE_SCROLL_LR}
+     *         {@link #TYPE_FIX_TOP} {@link #TYPE_FIX_BOTTOM}
      */
     public abstract int getType();
 
