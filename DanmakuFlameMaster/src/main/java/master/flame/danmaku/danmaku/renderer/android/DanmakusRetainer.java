@@ -17,7 +17,6 @@
 package master.flame.danmaku.danmaku.renderer.android;
 
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
-import master.flame.danmaku.danmaku.model.IDanmakuIterator;
 import master.flame.danmaku.danmaku.model.IDisplayer;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.util.DanmakuUtils;
@@ -109,12 +108,9 @@ public class DanmakusRetainer {
             boolean shown = drawItem.isShown();
             if (!shown) {
                 // 确定弹幕位置
-                IDanmakuIterator it = mVisibleDanmakus.iterator();
                 BaseDanmaku insertItem = null, firstItem = null, lastItem = null, minRightRow = null;
                 boolean overwriteInsert = false;
-                while (it.hasNext()) {
-                    BaseDanmaku item = it.next();
-
+                for(BaseDanmaku item : mVisibleDanmakus){
                     if(item == drawItem){
                         insertItem = item;
                         lastItem = null;
@@ -130,12 +126,8 @@ public class DanmakusRetainer {
                         break;
                     }
 
-                    if (minRightRow == null) {
+                    if (minRightRow == null || minRightRow.getRight() >= item.getRight()) {
                         minRightRow = item;
-                    } else {
-                        if (minRightRow.getRight() >= item.getRight()) {
-                            minRightRow = item;
-                        }
                     }
 
                     // 检查碰撞
@@ -151,10 +143,7 @@ public class DanmakusRetainer {
                 }
 
                 if (insertItem != null) {
-                    if (lastItem != null)
-                        topPos = lastItem.getBottom();
-                    else
-                        topPos = insertItem.getTop();
+                    topPos = lastItem != null ? lastItem.getBottom() : insertItem.getTop();
                     if (insertItem != drawItem){
                         mVisibleDanmakus.removeItem(insertItem);
                         shown = false;
@@ -237,10 +226,7 @@ public class DanmakusRetainer {
             }
             BaseDanmaku removeItem = null, firstItem = null;
             if (!shown) {
-                IDanmakuIterator it = mVisibleDanmakus.iterator();
-                while (it.hasNext()) {
-                    BaseDanmaku item = it.next();
-
+                for(BaseDanmaku item : mVisibleDanmakus){
                     if (item == drawItem) {
                         removeItem = null;
                         break;

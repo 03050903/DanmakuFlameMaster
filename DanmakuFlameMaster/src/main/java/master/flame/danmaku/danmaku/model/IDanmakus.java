@@ -16,7 +16,7 @@
 
 package master.flame.danmaku.danmaku.model;
 
-public interface IDanmakus {
+public interface IDanmakus extends Iterable<BaseDanmaku>{
 
     public void addItem(BaseDanmaku item);
 

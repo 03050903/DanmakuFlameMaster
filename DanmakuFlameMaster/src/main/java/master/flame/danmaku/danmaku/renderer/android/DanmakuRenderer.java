@@ -24,7 +24,6 @@ import master.flame.danmaku.danmaku.model.IDanmakus;
 import master.flame.danmaku.danmaku.model.IDisplayer;
 import master.flame.danmaku.danmaku.renderer.Renderer;
 
-
 public class DanmakuRenderer extends Renderer {
 
     private final DanmakuTimer mStartTimer = new DanmakuTimer();
@@ -43,22 +42,20 @@ public class DanmakuRenderer extends Renderer {
     @Override
     public RenderingState draw(IDisplayer disp, IDanmakus danmakus, long startRenderTime) {
         mRenderingState.reset();       
-        IDanmakuIterator itr = danmakus.iterator();
-        int orderInScreen = 0;        
         mStartTimer.update(System.currentTimeMillis());
+        int orderInScreen = 0;        
         int sizeInScreen = danmakus.size();
         BaseDanmaku drawItem = null;
-        while (itr.hasNext()) {
-
+        for(IDanmakuIterator itr = danmakus.iterator(); itr.hasNext(); ){
             drawItem = itr.next();
-            
             if (drawItem.isLate()) {
                 break;
             }
 
             if (drawItem.time < startRenderTime
-                    || (drawItem.priority == 0 && DanmakuFilters.getDefault().filter(drawItem,
-                            orderInScreen, sizeInScreen, mStartTimer))) {
+                    || (drawItem.priority == 0 
+                        && DanmakuFilters.getDefault()
+                                    .filter(drawItem, orderInScreen, sizeInScreen, mStartTimer))) {
                 continue;
             }
             

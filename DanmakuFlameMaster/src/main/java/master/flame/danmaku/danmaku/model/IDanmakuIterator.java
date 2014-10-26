@@ -1,13 +1,8 @@
 package master.flame.danmaku.danmaku.model;
 
-public interface IDanmakuIterator {
+import java.util.Iterator;
 
-    public BaseDanmaku next();
-    
-    public boolean hasNext();
-    
+public interface IDanmakuIterator extends Iterator<BaseDanmaku>{
+
     public void reset();
-
-    public void remove();
-    
 }

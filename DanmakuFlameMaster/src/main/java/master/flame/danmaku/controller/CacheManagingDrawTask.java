@@ -220,9 +220,7 @@ public class CacheManagingDrawTask extends DrawTask {
 
         private synchronized void evictAll() {
             if (mCaches != null) {
-                IDanmakuIterator it = mCaches.iterator();
-                while(it.hasNext()) {
-                    BaseDanmaku danmaku = it.next();
+                for( BaseDanmaku danmaku : mCaches) {
                     entryRemoved(true, danmaku, null);
                 }
                 mCaches.clear();
@@ -331,13 +329,11 @@ public class CacheManagingDrawTask extends DrawTask {
         
         private synchronized BaseDanmaku findReuseableCache(BaseDanmaku refDanmaku,
                 boolean strictMode) {
-            IDanmakuIterator it = mCaches.iterator();
             int slopPixel = 0;
             if (!strictMode) {
                 slopPixel = mDisp.getSlopPixel() * 2;
             }
-            while (it.hasNext()) {
-                BaseDanmaku danmaku = it.next();
+            for (BaseDanmaku danmaku : mCaches) {
                 if (!danmaku.hasDrawingCache()) {
                     continue;
                 }
@@ -544,8 +540,6 @@ public class CacheManagingDrawTask extends DrawTask {
                 if (danmakus == null || danmakus.isEmpty())
                     return 0;
                 BaseDanmaku last = danmakus.last();
-                IDanmakuIterator itr = danmakus.iterator();
-
                 BaseDanmaku item = null;
                 long consumingTime = 0;
                 int count = 0;
@@ -553,12 +547,7 @@ public class CacheManagingDrawTask extends DrawTask {
                 int currScreenIndex = 0;
                 int sizeInScreen = danmakus.size();
 //                String message = "";
-                while (!mPause) {
-                    boolean hasNext = itr.hasNext();
-                    if(!hasNext){
-//                        message = "break at not hasNext";
-                        break;
-                    }
+                for (IDanmakuIterator itr = danmakus.iterator(); !mPause && itr.hasNext(); ) {
                     item = itr.next();
                     count++;
                     
